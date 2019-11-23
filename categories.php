@@ -99,6 +99,12 @@ if (isset($_POST['btn-login'])) {
             background: pink;
         }
         
+        a {
+            color:black;
+        }
+        a:hover {
+            color:gray;
+        }
         .img {
             height: 100%;
             width: 100%
@@ -178,98 +184,65 @@ if (isset($_POST['btn-login'])) {
                 echo "<h3 class='text-center'>Welcome, ".$userRow['username']."</h3>";
             }
         ?>
-        <!-- Dishes carousel -->
-        <h2 class="bold">Popular Dishes</h2>
-        <hr>
         <div class="row">
             <div class="col-12">
-                <div id="dish" class="carousel slide" data-ride="carousel">
-                    <ul class="carousel-indicators">
-                        <li data-target="#dish" data-slide-to="0" class="active"></li>
-                        <li data-target="#dish" data-slide-to="1"></li>
-                        <li data-target="#dish" data-slide-to="2"></li>
-                    </ul>
-                    <div class="carousel-inner">
-                        <div class="carousel-item active">
-                            <img class="img" src="images/3.png" alt="Los Angeles" width="1100" height="500">
-                            <div class="carousel-caption">
-                                <h3>Family Meals</h3>
-                                <p>Enjoy a great selection of dishes perfect for your family.</p>
-                                <br>
-                            </div>
-                        </div>
-                        <div class="carousel-item">
-                            <img class="img" src="images/2.png" alt="Chicago" width="1100" height="500">
-                            <div class="carousel-caption">
-                                <h3>Exquisite Pizzas</h3>
-                                <p>Have a taste of pizzas with a wide variety of flavors.</p>
-                                <br>
-                            </div>
-                        </div>
-                        <div class="carousel-item">
-                            <img class="img" src="images/1.png" alt="New York" width="1100" height="500">
-                            <div class="carousel-caption">
-                                <h3>Tempting Seafood</h3>
-                                <p>Eat like a king with perfectly-cooked seafood.</p>
-                                <br>
-                            </div>
-                        </div>
-                    </div>
-                    <a class="carousel-control-prev" href="#dish" data-slide="prev">
-                        <span class="carousel-control-prev-icon"></span>
-                    </a>
-                    <a class="carousel-control-next" href="#dish" data-slide="next">
-                        <span class="carousel-control-next-icon"></span>
-                    </a>
-                </div>
+                <h2 class="bold text-center">Categories</h2>
+                <hr>
             </div>
         </div>
-        <!-- Restaurants carousel -->
-        <h2 class="bold">Popular Restaurants</h2>
-        <hr>
         <div class="row">
-            <div class="col-12">
-                <div id="restaurant" class="carousel slide" data-ride="carousel">
-                    <ul class="carousel-indicators">
-                        <li data-target="#restaurant" data-slide-to="0" class="active"></li>
-                        <li data-target="#restaurant" data-slide-to="1"></li>
-                        <li data-target="#restaurant" data-slide-to="2"></li>
-                    </ul>
-                    <div class="carousel-inner">
-                        <div class="carousel-item active">
-                            <img class="img" src="images/r3.png" alt="Los Angeles" width="1100" height="500">
-                            <div class="carousel-caption">
-                                <h3>Bar Pintxos</h3>
-                                <p>The food, first and foremost, is spectacular.</p>
-                                <br>
-                            </div>
-                        </div>
-                        <div class="carousel-item">
-                            <img class="img" src="images/r2.png" alt="Chicago" width="1100" height="500">
-                            <div class="carousel-caption">
-                                <h3>Benjarong Royal Thai</h3>
-                                <p>Experience gourmet like never before.</p>
-                                <br>
-                            </div>
-                        </div>
-                        <div class="carousel-item">
-                            <img class="img" src="images/r1.png" alt="New York" width="1100" height="500">
-                            <div class="carousel-caption">
-                                <h3>Canton Road</h3>
-                                <p>Majestic food regarded as masterpieces await.</p>
-                                <br>
-                            </div>
-                        </div>
-                    </div>
-                    <a class="carousel-control-prev" href="#restaurant" data-slide="prev">
-                        <span class="carousel-control-prev-icon"></span>
-                    </a>
-                    <a class="carousel-control-next" href="#restaurant" data-slide="next">
-                        <span class="carousel-control-next-icon"></span>
-                    </a>
-                </div>
+            <div class="col-3">
+                <a href="#">
+                    <img src="images/categories/8.png" style="height:auto; width:100%">
+                    <h6 class="text-center bold">PIZZA</h6>
+                </a>
+            </div>
+            <div class="col-3">
+                <a href="#">
+                    <img src="images/categories/7.png" style="height:auto; width:100%">
+                    <h6 class="text-center bold">PASTA</h6>
+                </a>
+            </div>
+            <div class="col-3">
+                <a href="#">
+                    <img src="images/categories/6.png" style="height:auto; width:100%">
+                    <h6 class="text-center bold">LECHON</h6>
+                </a>
+            </div>
+            <div class="col-3">
+                <a href="#">
+                    <img src="images/categories/5.png" style="height:auto; width:100%">
+                    <h6 class="text-center bold">HIGHEST RATED</h6>
+                </a>
             </div>
         </div>
+        <div class="row">
+            <div class="col-3">
+                <a href="#">
+                    <img src="images/categories/4.png" style="height:auto; width:100%">
+                    <h6 class="text-center bold">BEST VALUE</h6>
+                </a>
+            </div>
+            <div class="col-3">
+                <a href="#">
+                    <img src="images/categories/3.png" style="height:auto; width:100%">
+                    <h6 class="text-center bold">SAMGYEOPSAL</h6>
+                </a>
+            </div>
+            <div class="col-3">
+                <a href="#">
+                    <img src="images/categories/2.png" style="height:auto; width:100%">
+                    <h6 class="text-center bold">CHINESE</h6>
+                </a>
+            </div>
+            <div class="col-3">
+                <a href="#">
+                    <img src="images/categories/1.png" style="height:auto; width:100%">
+                    <h6 class="text-center bold">BUFFET</h6>
+                </a>
+            </div>
+        </div>
+        <hr>
     </div>
 
     <!-- Login Modal -->
