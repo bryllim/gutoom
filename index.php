@@ -178,6 +178,8 @@ if (isset($_POST['btn-login'])) {
                 echo "<h3 class='text-center'>Welcome, ".$userRow['username']."</h3>";
             }
         ?>
+
+        
         <!-- Dishes carousel -->
         <h2 class="bold">Popular Dishes</h2>
         <hr>

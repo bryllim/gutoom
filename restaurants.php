@@ -164,6 +164,8 @@ if (isset($_POST['btn-login'])) {
         </div>
     </nav>
 
+
+
     <div class="container" style="margin-top:30px">
         <!-- Check if there's an error -->
         <?php
@@ -186,59 +188,62 @@ if (isset($_POST['btn-login'])) {
         ?>
         <div class="row">
             <div class="col-12">
-                <h2 class="bold text-center">Categories</h2>
+                <h2 class="bold text-center">Top Pizza Places</h2>
                 <hr>
             </div>
         </div>
         <div class="row">
             <div class="col-3">
-                <a href="restaurants.php">
-                    <img src="images/categories/8.png" style="height:auto; width:100%">
-                    <h6 class="text-center bold">PIZZA</h6>
+                <a href="guisepe.php">
+                    <img src="images/restaurants/gui1.png" style="height:auto; width:100%">
+                    <h6 class="text-center bold">Giuseppe Pizzeria & Sicilian Roast</h6>
                 </a>
             </div>
             <div class="col-3">
                 <a href="#">
-                    <img src="images/categories/7.png" style="height:auto; width:100%">
-                    <h6 class="text-center bold">PASTA</h6>
+                    <img src="images/restaurants/micha.png" style="height:auto; width:100%">
+                    <h6 class="text-center bold">Pizzeria Michelangelo</h6>
                 </a>
             </div>
             <div class="col-3">
                 <a href="#">
-                    <img src="images/categories/6.png" style="height:auto; width:100%">
-                    <h6 class="text-center bold">LECHON</h6>
+                    <img src="images/restaurants/laNostra.jpg" style="height:auto; width:100%">
+                    <h6 class="text-center bold">La Nostra Pizzeria Napoletana</h6>
                 </a>
             </div>
             <div class="col-3">
                 <a href="#">
-                    <img src="images/categories/5.png" style="height:auto; width:100%">
-                    <h6 class="text-center bold">HIGHEST RATED</h6>
+                    <img src="images/restaurants/Sbarro.jpg" style="height:auto; width:100%">
+                    <h6 class="text-center bold">Sbarro</h6>
                 </a>
             </div>
         </div>
+        <br>
+        <br>
+        <br>
         <div class="row">
             <div class="col-3">
                 <a href="#">
-                    <img src="images/categories/4.png" style="height:auto; width:100%">
-                    <h6 class="text-center bold">BEST VALUE</h6>
+                    <img src="images/restaurants/yellow.jpg" style="height:auto; width:100%">
+                    <h6 class="text-center bold">Yellow Cab</h6>
                 </a>
             </div>
             <div class="col-3">
                 <a href="#">
-                    <img src="images/categories/3.png" style="height:auto; width:100%">
-                    <h6 class="text-center bold">SAMGYEOPSAL</h6>
+                    <img src="images/restaurants/snr.jpg" style="height:auto; width:100%">
+                    <h6 class="text-center bold">S & R</h6>
                 </a>
             </div>
             <div class="col-3">
                 <a href="#">
-                    <img src="images/categories/2.png" style="height:auto; width:100%">
-                    <h6 class="text-center bold">CHINESE</h6>
+                    <img src="images/restaurants/tavolmain.jpg" style="height:auto; width:100%">
+                    <h6 class="text-center bold">Tavolata</h6>
                 </a>
             </div>
             <div class="col-3">
                 <a href="#">
-                    <img src="images/categories/1.png" style="height:auto; width:100%">
-                    <h6 class="text-center bold">BUFFET</h6>
+                    <img src="images/restaurants/alber.jpg" style="height:auto; width:100%">
+                    <h6 class="text-center bold">Alberto's Pizza</h6>
                 </a>
             </div>
         </div>
@@ -311,7 +316,7 @@ if (isset($_POST['btn-login'])) {
                 <br><br>By booking ahead on special nights using our application.
                 Gutoom allows people to make online table reservations at their favorite restaurants in a seamless, hassle-free manner and help out customers in deciding the right dinning/outing for their specific taste. People prefer to go out knowing that they have reservation, instead of incurring risk of not getting a table at their desired place. In this online restaurant table reservation, customers are ensured that they will have a great experience on the restaurant they like, it guarantees the customers that they will receive his table at the time and place they planned and will not have to go through the troubles of waiting until a table is available or being put on a waiting list, or worst needing to find another place to eat because the one chosen won’t be able to serve them. Customers can choose a restaurant based on location, timing, cuisine, and number of guests.
                 <hr>
-                <h4 class="text-center">Developers</h4>
+                <h4 class="text-center">MEET THE TEAM</h4>
                 <img src="images/developers.png" style="height:auto; width:100%">
                 </div>
             </div>
