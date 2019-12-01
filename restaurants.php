@@ -13,7 +13,9 @@ if (isset($_SESSION['user']) != "") {
 //registration
 if (isset($_POST['signup'])) {
 
-    $uname = trim($_POST['uname']); // get posted data and remove whitespace
+    $firstname = trim($_POST['firstname']);
+    $lastname = trim($_POST['lastname']);
+    $phone = trim($_POST['phone']); // get posted data and remove whitespace
     $email = trim($_POST['email']);
     $upass = trim($_POST['pass']);
 
@@ -32,8 +34,8 @@ if (isset($_POST['signup'])) {
     if ($count == 0) { // if email is not found add user
 
 
-        $stmts = $conn->prepare("INSERT INTO users(username,email,password) VALUES(?, ?, ?)");
-        $stmts->bind_param("sss", $uname, $email, $password);
+        $stmts = $conn->prepare("INSERT INTO users(email,password,firstname,lastname,phone) VALUES(?, ?, ?, ?, ?)");
+        $stmts->bind_param("sssss", $email, $password, $firstname, $lastname, $phone);
         $res = $stmts->execute();//get result
         $stmts->close();
 
@@ -180,74 +182,43 @@ if (isset($_POST['btn-login'])) {
             <?php
         }
         ?>
-        <!-- Greet the user when login -->
-        <?php
-            if (isset($_SESSION['user']) != "") {
-                echo "<h3 class='text-center'>Welcome, ".$userRow['username']."</h3>";
-            }
-        ?>
         <div class="row">
             <div class="col-12">
-                <h2 class="bold text-center">Top Pizza Places</h2>
+                <h2 class="bold text-center"><?php echo $_GET['category'] ?> PLACES</h2>
                 <hr>
             </div>
         </div>
-        <div class="row">
-            <div class="col-3">
-                <a href="guisepe.php">
-                    <img src="images/restaurants/gui1.png" style="height:auto; width:100%">
-                    <h6 class="text-center bold">Giuseppe Pizzeria & Sicilian Roast</h6>
-                </a>
-            </div>
-            <div class="col-3">
-                <a href="#">
-                    <img src="images/restaurants/micha.png" style="height:auto; width:100%">
-                    <h6 class="text-center bold">Pizzeria Michelangelo</h6>
-                </a>
-            </div>
-            <div class="col-3">
-                <a href="#">
-                    <img src="images/restaurants/laNostra.jpg" style="height:auto; width:100%">
-                    <h6 class="text-center bold">La Nostra Pizzeria Napoletana</h6>
-                </a>
-            </div>
-            <div class="col-3">
-                <a href="#">
-                    <img src="images/restaurants/Sbarro.jpg" style="height:auto; width:100%">
-                    <h6 class="text-center bold">Sbarro</h6>
-                </a>
-            </div>
+        <?php
+            $stmt = $conn->prepare("SELECT * FROM restaurant WHERE category = ?");
+            $stmt->bind_param("s", $_GET['category']);
+            //execute query
+            $stmt->execute();
+            //get result
+            $res = $stmt->get_result();
+            $stmt->close();
+            $count = $res->num_rows;
+            $i = 0;
+            if ($count > 0) {
+                echo '<div class="row">';
+                while($row = mysqli_fetch_array($res, MYSQLI_ASSOC)) {
+                    $i++;
+                    if($i > 3){
+                        echo '</div>';
+                        echo '<div class="row">';
+                        $i = 0;
+                    }
+                    echo '<div class="col-3">';
+                    echo '<a href="details.php?id='.$row['id'].'">';
+                    echo '<img src="'.$row['image'].'" style="height:auto; width:100%">';
+                    echo '<h6 class="text-center bold">'.$row['name'].'</h6>';
+                    echo '</a>';
+                    echo '</div>';
+                }
+            } else {
+                echo "<h1 class='m-5 p-5'>Sorry, no restaurants are available.</h1>";
+            }
+        ?>
         </div>
-        <br>
-        <br>
-        <br>
-        <div class="row">
-            <div class="col-3">
-                <a href="#">
-                    <img src="images/restaurants/yellow.jpg" style="height:auto; width:100%">
-                    <h6 class="text-center bold">Yellow Cab</h6>
-                </a>
-            </div>
-            <div class="col-3">
-                <a href="#">
-                    <img src="images/restaurants/snr.jpg" style="height:auto; width:100%">
-                    <h6 class="text-center bold">S & R</h6>
-                </a>
-            </div>
-            <div class="col-3">
-                <a href="#">
-                    <img src="images/restaurants/tavolmain.jpg" style="height:auto; width:100%">
-                    <h6 class="text-center bold">Tavolata</h6>
-                </a>
-            </div>
-            <div class="col-3">
-                <a href="#">
-                    <img src="images/restaurants/alber.jpg" style="height:auto; width:100%">
-                    <h6 class="text-center bold">Alberto's Pizza</h6>
-                </a>
-            </div>
-        </div>
-        <hr>
     </div>
 
     <!-- Login Modal -->
@@ -287,9 +258,12 @@ if (isset($_POST['btn-login'])) {
                 <div class="modal-body">
                     <form method="POST" autocomplete="off">
                         <div class="form-group">
-                            <input type="text" name="uname" class="form-control" placeholder="Enter a username..." required/>
-                            <input type="email" name="email" class="form-control mt-1" placeholder="Enter your email..." required/>
-                            <input type="password" name="pass" class="form-control mt-1" placeholder="Enter a password..." required/>
+                            <input type="text" name="firstname" class="form-control" placeholder="First name" required/>
+                            <input type="text" name="lastname" class="form-control mt-1" placeholder="Last name" required/>
+                            <input type="text" name="phone" class="form-control mt-1" placeholder="Contact number" required/>
+                            <hr>
+                            <input type="email" name="email" class="form-control mt-1" placeholder="Email address" required/>
+                            <input type="password" name="pass" class="form-control mt-1" placeholder="Password" required/>
                         </div>
                         <hr>
                         <button type="submit" name="signup" id="reg" class="btn btn-block btn-light bold" style="background:pink !important; border:0 !important">Submit</button>

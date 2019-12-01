@@ -13,7 +13,9 @@ if (isset($_SESSION['user']) != "") {
 //registration
 if (isset($_POST['signup'])) {
 
-    $uname = trim($_POST['uname']); // get posted data and remove whitespace
+    $firstname = trim($_POST['firstname']);
+    $lastname = trim($_POST['lastname']);
+    $phone = trim($_POST['phone']); // get posted data and remove whitespace
     $email = trim($_POST['email']);
     $upass = trim($_POST['pass']);
 
@@ -32,8 +34,8 @@ if (isset($_POST['signup'])) {
     if ($count == 0) { // if email is not found add user
 
 
-        $stmts = $conn->prepare("INSERT INTO users(username,email,password) VALUES(?, ?, ?)");
-        $stmts->bind_param("sss", $uname, $email, $password);
+        $stmts = $conn->prepare("INSERT INTO users(email,password,firstname,lastname,phone) VALUES(?, ?, ?, ?, ?)");
+        $stmts->bind_param("sssss", $email, $password, $firstname, $lastname, $phone);
         $res = $stmts->execute();//get result
         $stmts->close();
 
@@ -178,12 +180,6 @@ if (isset($_POST['btn-login'])) {
             <?php
         }
         ?>
-        <!-- Greet the user when login -->
-        <?php
-            if (isset($_SESSION['user']) != "") {
-                echo "<h3 class='text-center'>Welcome, ".$userRow['username']."</h3>";
-            }
-        ?>
         <div class="row">
             <div class="col-12">
                 <h2 class="bold text-center">Categories</h2>
@@ -192,13 +188,13 @@ if (isset($_POST['btn-login'])) {
         </div>
         <div class="row">
             <div class="col-3">
-                <a href="restaurants.php">
+                <a href="restaurants.php?category=PIZZA">
                     <img src="images/categories/8.png" style="height:auto; width:100%">
                     <h6 class="text-center bold">PIZZA</h6>
                 </a>
             </div>
             <div class="col-3">
-                <a href="#">
+                <a href="restaurants.php?category=PASTA">
                     <img src="images/categories/7.png" style="height:auto; width:100%">
                     <h6 class="text-center bold">PASTA</h6>
                 </a>
@@ -282,9 +278,12 @@ if (isset($_POST['btn-login'])) {
                 <div class="modal-body">
                     <form method="POST" autocomplete="off">
                         <div class="form-group">
-                            <input type="text" name="uname" class="form-control" placeholder="Enter a username..." required/>
-                            <input type="email" name="email" class="form-control mt-1" placeholder="Enter your email..." required/>
-                            <input type="password" name="pass" class="form-control mt-1" placeholder="Enter a password..." required/>
+                            <input type="text" name="firstname" class="form-control" placeholder="First name" required/>
+                            <input type="text" name="lastname" class="form-control mt-1" placeholder="Last name" required/>
+                            <input type="text" name="phone" class="form-control mt-1" placeholder="Contact number" required/>
+                            <hr>
+                            <input type="email" name="email" class="form-control mt-1" placeholder="Email address" required/>
+                            <input type="password" name="pass" class="form-control mt-1" placeholder="Password" required/>
                         </div>
                         <hr>
                         <button type="submit" name="signup" id="reg" class="btn btn-block btn-light bold" style="background:pink !important; border:0 !important">Submit</button>
