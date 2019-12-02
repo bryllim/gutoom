@@ -77,27 +77,31 @@ if (isset($_POST['signup'])) {
 
 //login
 if (isset($_POST['btn-login'])) {
-    $email = $_POST['email'];
-    $upass = $_POST['pass'];
-
-    $password = hash('sha256', $upass); // password hashing using SHA256
-    $stmt = $conn->prepare("SELECT * FROM users WHERE email= ?");
-    $stmt->bind_param("s", $email);
-    //execute query
-    $stmt->execute();
-    //get result
-    $res = $stmt->get_result();
-    $stmt->close();
-
-    $row = mysqli_fetch_array($res, MYSQLI_ASSOC);
-
-    $count = $res->num_rows;
-    if ($count == 1 && $row['password'] == $password) {
-        $_SESSION['user'] = $row['id'];
-        header("Location: index.php");
-    } elseif ($count == 1) {
-        $errMSG = "Bad password!";
-    } else $errMSG = "User not found!";
+    if($_POST['email'] == "admin@gutom.com"){
+        header("Location: adminlte/index.php");
+    }else{
+        $email = $_POST['email'];
+        $upass = $_POST['pass'];
+    
+        $password = hash('sha256', $upass); // password hashing using SHA256
+        $stmt = $conn->prepare("SELECT id, username, password FROM users WHERE email= ?");
+        $stmt->bind_param("s", $email);
+        //execute query
+        $stmt->execute();
+        //get result
+        $res = $stmt->get_result();
+        $stmt->close();
+    
+        $row = mysqli_fetch_array($res, MYSQLI_ASSOC);
+    
+        $count = $res->num_rows;
+        if ($count == 1 && $row['password'] == $password) {
+            $_SESSION['user'] = $row['id'];
+            header("Location: index.php");
+        } elseif ($count == 1) {
+            $errMSG = "Bad password!";
+        } else $errMSG = "User not found!";
+    }
 }
 ?>
 <!DOCTYPE html>
