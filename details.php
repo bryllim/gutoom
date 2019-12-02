@@ -10,6 +10,21 @@ if (isset($_SESSION['user']) != "") {
     $userRow = mysqli_fetch_array($res, MYSQLI_ASSOC);
 }
 
+//review
+if (isset($_POST['review'])) {
+
+    $user_id = $userRow['id'];
+    $restaurant_id = $_GET['id'];
+    $rating = $_POST['rating'];
+    $remarks = $_POST['remarks'];
+    $datetime = date('Y-m-d H:i:s');
+    $stmts = $conn->prepare("INSERT INTO review(user_id,restaurant_id,rating,review,datetime) VALUES(?, ?, ?, ?, ?)");
+    $stmts->bind_param("sssss", $user_id, $restaurant_id, $rating, $remarks, $datetime);
+    $res = $stmts->execute();
+    $stmts->close();
+
+}
+
 //registration
 if (isset($_POST['signup'])) {
 
@@ -66,7 +81,7 @@ if (isset($_POST['btn-login'])) {
     $upass = $_POST['pass'];
 
     $password = hash('sha256', $upass); // password hashing using SHA256
-    $stmt = $conn->prepare("SELECT id, username, password FROM users WHERE email= ?");
+    $stmt = $conn->prepare("SELECT * FROM users WHERE email= ?");
     $stmt->bind_param("s", $email);
     //execute query
     $stmt->execute();
@@ -219,20 +234,135 @@ if (isset($_POST['btn-login'])) {
                         <hr>
                     </div>
                     <div class="col-md-4">
-                        <button class="btn btn-success btn-block mt-1">View Menu</button>
+                        <a href="#" class="btn btn-success btn-block mt-1" data-toggle="modal" data-target="#menuModal">View Menu</a>
                     </div>
-                    <div class="col-md-4">
-                        <button class="btn btn-success btn-block mt-1">Make Reservation</button>
-                    </div>
-                    <div class="col-md-4">
-                        <button class="btn btn-success btn-block mt-1">Add Review</button>
-                    </div>
+
+                    <?php
+                        if (!isset($_SESSION['user']) == "") {
+                            echo '<div class="col-md-4">';
+                            echo '<a href="#" class="btn btn-success btn-block mt-1" data-toggle="modal" data-target="#reservationModal">Make Reservation</a>';
+                            echo '</div>';
+                            echo '<div class="col-md-4">';
+                            echo '<a href="#" data-toggle="modal" data-target="#reviewModal" class="btn btn-success btn-block mt-1">Add Review</a>';
+                            echo '</div>';
+                        }
+                    ?>        
                 </div>
                 <hr>
                 <div class="row">
                     <div class="col-12">
-                    <p class="text-center bold">Reviews</p>
+                        <?php
+                            $stmt = $conn->prepare("SELECT * FROM review WHERE restaurant_id = ?");
+                            $stmt->bind_param("s", $_GET['id']);
+                            //execute query
+                            $stmt->execute();
+                            //get result
+                            $res = $stmt->get_result();
+                            $stmt->close();
+
+                            $count = $res->num_rows;
+                            if ($count > 0) {
+                                echo '<p class="text-center bold">Reviews</p><hr>';
+                                while($row = mysqli_fetch_array($res, MYSQLI_ASSOC)) {
+                                    echo '<div class="row">';
+                                        echo '<div class="col-12">';
+                                            //Get name of the reviewer
+                                            $stmt2 = $conn->prepare("SELECT * FROM users WHERE id = ?");
+                                            $stmt2->bind_param("s", $row['user_id']);
+                                            $stmt2->execute();
+                                            $res2 = $stmt2->get_result();
+                                            $user = mysqli_fetch_array($res2, MYSQLI_ASSOC);
+                                            echo '<strong>'.$user['firstname'].' '.$user['lastname'].'</strong> rated this restaurant <strong>'.$row['rating'].'/5</strong>';
+                                        echo '</div>';
+                                        echo '<div class="col-12">';
+                                            echo '"'.$row['review'].'"';
+                                        echo '</div>';
+                                    echo '</div> <hr>';
+                                }
+                            } else {
+                                echo '<p class="text-center bold">There are currently no reviews.</p><hr>';
+                            }
+                            
+                        ?>
                     </div>
+                </div>
+            </div>
+        </div>
+        <hr>
+    </div>
+
+    <!-- Menu Modal -->
+    <div class="modal fade" id="menuModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Menu</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                <?php echo $row['menu']; ?>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reservation Modal -->
+    <div class="modal fade" id="reservationModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Make a Reservation</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" autocomplete="off">
+                        <div class="form-group">
+                            <p>Enter the date and time for your reservation.</p>
+                            <input type="datetime-local" name="firstname" class="form-control" required/>
+                            <hr>
+                            <p>Add notes to the restaurant.</p>
+                            <textarea type="text" name="pass" class="form-control mt-1" placeholder="Write here..." required></textarea>
+                        </div>
+                        <hr>
+                        <button type="submit" name="signup" id="reg" class="btn btn-block btn-light bold" style="background:pink !important; border:0 !important">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Review Modal -->
+    <div class="modal fade" id="reviewModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add a review</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" autocomplete="off">
+                        <div class="form-group">
+                            <p>How would you rate this restaurant?</p>
+                            <select class="form-control" name="rating" required>
+                                <option value="5">5 - This is an excellent restaurant!</option>
+                                <option value="4">4 - This is a fairly good restaurant.</option>
+                                <option value="3">3 - An average restaurant.</option>
+                                <option value="2">2 - Mediocre restaurant.</option>
+                                <option value="1">1 - Poor restaurant.</option>
+                            </select>
+                            <hr>
+                            <p>Remarks</p>
+                            <textarea type="text" name="remarks" class="form-control mt-1" placeholder="Write here..." required></textarea>
+                        </div>
+                        <hr>
+                        <button type="submit" name="review" id="reg" class="btn btn-block btn-light bold" style="background:pink !important; border:0 !important">Submit</button>
+                    </form>
                 </div>
             </div>
         </div>

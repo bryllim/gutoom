@@ -66,7 +66,7 @@ if (isset($_POST['btn-login'])) {
     $upass = $_POST['pass'];
 
     $password = hash('sha256', $upass); // password hashing using SHA256
-    $stmt = $conn->prepare("SELECT id, username, password FROM users WHERE email= ?");
+    $stmt = $conn->prepare("SELECT * FROM users WHERE email= ?");
     $stmt->bind_param("s", $email);
     //execute query
     $stmt->execute();
