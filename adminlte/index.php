@@ -718,11 +718,55 @@
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
+      <?php
+      ob_start();      
+      $db_host = "";
+      $db_name = "gutom";
+      $db_user = "root";
+      $db_pass = "";
+
+
+      $conn = new mysqli($db_host, $db_user, $db_pass, $db_name);
+
+      // Check connection
+      if ($conn->connect_error) {
+          die("Connection failed: " . $conn->connect_error);
+      }
+
+      //Add a restaurant
+      if (isset($_POST['restaurant'])) {
+        $stmts = $conn->prepare("INSERT INTO restaurant(name,details,address,time_open,menu,coordinate_x,coordinate_y,category,image,email) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmts->bind_param("ssssssssss", $_POST['name'], $_POST['details'], $_POST['address'], $_POST['time_open'], $_POST['menu'], $_POST['coordinate_x'], $_POST['coordinate_y'], $_POST['category'], $_POST['image'], $_POST['email']);
+        $res = $stmts->execute();
+        $stmts->close();
+      }
+
+      //change covers
+      if (isset($_POST['cover1'])) {
+        $stmts = $conn->prepare("UPDATE `cover` SET `title`= ?,`description`= ?,`image`=? WHERE id = 1");
+        $stmts->bind_param("sss", $_POST['title'], $_POST['description'], $_POST['image']);
+        $res = $stmts->execute();
+        $stmts->close();
+      }
+      if (isset($_POST['cover2'])) {
+        $stmts = $conn->prepare("UPDATE `cover` SET `title`= ?,`description`= ?,`image`=? WHERE id = 2");
+        $stmts->bind_param("sss", $_POST['title'], $_POST['description'], $_POST['image']);
+        $res = $stmts->execute();
+        $stmts->close();
+      }
+      if (isset($_POST['cover3'])) {
+        $stmts = $conn->prepare("UPDATE `cover` SET `title`= ?,`description`= ?,`image`=? WHERE id = 3");
+        $stmts->bind_param("sss", $_POST['title'], $_POST['description'], $_POST['image']);
+        $res = $stmts->execute();
+        $stmts->close();
+      }
+      ?>
         <!-- Small boxes (Stat box) -->
         <div class="row">
           <div class="col-12 mb-4">
-            <button type="button" class="btn btn-lg btn-primary">Add a restaurant</button>
-            <button type="button" class="btn btn-lg btn-primary">Add cover photo</button>
+            <a href="#" data-toggle="modal" data-target="#restaurantModal" class="btn btn-lg btn-primary">Add a restaurant</a>
+            <a href="#" data-toggle="modal" data-target="#coverModal" class="btn btn-lg btn-primary">Change cover photos</a>
+            <a href="../" class="btn btn-lg btn-warning">Logout</a>
           </div>
           <div class="col-lg-3 col-6">
             <!-- small box -->
@@ -1309,6 +1353,94 @@
     </section>
     <!-- /.content -->
   </div>
+
+  <!-- Change Covers Modal -->
+  <div class="modal fade" id="coverModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Change Covers</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" autocomplete="off">
+                        <div class="form-group">
+                            <h4><strong>COVER</strong></h3>
+                            <input type="text" class="form-control mb-1" name="title" placeholder="Title" required/>
+                            <input type="text" class="form-control mb-1" name="description" placeholder="Description" required/>
+                            <input type="text" class="form-control" name="image" placeholder="Image path" required/>
+                        </div>
+                        <hr>
+                        <button type="submit" name="cover1" id="reg" class="btn btn-primary">Change Cover 1</button>
+                        <button type="submit" name="cover2" id="reg" class="btn btn-primary">Change Cover 2</button>
+                        <button type="submit" name="cover3" id="reg" class="btn btn-primary">Change Cover 3</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+  <!-- Add Restaurant Modal -->
+  <div class="modal fade" id="restaurantModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add a Restaurant</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" autocomplete="off">
+                        <div class="form-group">
+                            <p class="mb-0">Restaurant name</p>
+                            <input type="text" class="form-control" name="name" placeholder="Write here..." required/>
+                            <p class="mb-0 mt-1">Details</p>
+                            <textarea type="text" class="form-control" name="details" placeholder="Brief description of the restaurant, contact information, etc." required></textarea>
+                            <p class="mb-0 mt-1">Address</p>
+                            <input type="text" class="form-control mb-2" name="address" placeholder="Where is the restaurant located?" required/>
+                            <div class="row">
+                              <div class="col-4 mt-2">
+                                <p>Restaurant map coordinates:</p>
+                              </div>
+                              <div class="col-2">
+                                <input type="text" class="form-control mt-1" name="coordinate_x" placeholder="Coordinate X" required/>
+                              </div>
+                              <div class="col-2">
+                                <input type="text" class="form-control mt-1" name="coordinate_y" placeholder="Coordinate Y" required/>
+                              </div>
+                            </div>
+                            <p class="mb-0 mt-1">Time Open</p>
+                            <input type="text" class="form-control" name="time_open" placeholder="At what time is the restaurant open?" required/>
+                            <p class="mb-0 mt-1">Menu</p>
+                            <textarea type="text" class="form-control" name="menu" rows="5" placeholder="Write the contents of the restaurant's menu here..." required></textarea>
+                            <p class="mb-0 mt-1">Category</p>
+                            <select class="form-control" name="category" required>
+                                <option value="PIZZA">Pizza</option>
+                                <option value="PASTA">Pasta</option>
+                                <option value="LECHON">Lechon</option>
+                                <option value="TOP">Highest Rated</option>
+                                <option value="VALUE">Best Value</option>
+                                <option value="SAMGYEOPSAL">Samgyeopsal</option>
+                                <option value="CHINESE">Chinese</option>
+                                <option value="BUFFET">Buffet</option>
+                            </select>
+                            <p class="mb-0 mt-2">Restaurant email address</p>
+                            <small>This will be used to send customer reservations.</small>
+                            <input type="email" name="email" class="form-control mt-1" required></input>
+                            <p class="mb-0 mt-1">Restaurant photo filepath</p>
+                            <input type="text" name="image" class="form-control mt-1" required></input>
+                        </div>
+                        <hr>
+                        <button type="submit" name="restaurant" id="reg" class="btn btn-block btn-primary">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
   <!-- /.content-wrapper -->
   <footer class="main-footer">
     <strong>Copyright &copy; 2014-2019 <a href="http://adminlte.io">AdminLTE.io</a>.</strong>

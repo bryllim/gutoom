@@ -70,22 +70,27 @@ if (isset($_POST['btn-login'])) {
     
         $password = hash('sha256', $upass); // password hashing using SHA256
         $stmt = $conn->prepare("SELECT id, username, password FROM users WHERE email= ?");
-        $stmt->bind_param("s", $email);
-        //execute query
-        $stmt->execute();
-        //get result
-        $res = $stmt->get_result();
-        $stmt->close();
-    
-        $row = mysqli_fetch_array($res, MYSQLI_ASSOC);
-    
-        $count = $res->num_rows;
-        if ($count == 1 && $row['password'] == $password) {
-            $_SESSION['user'] = $row['id'];
-            header("Location: index.php");
-        } elseif ($count == 1) {
-            $errMSG = "Bad password!";
-        } else $errMSG = "User not found!";
+
+        if($stmt == FALSE){
+            $errMSG = "User not found!";
+        }else{
+            $stmt->bind_param("s", $email);
+            //execute query
+            $stmt->execute();
+            //get result
+            $res = $stmt->get_result();
+            $stmt->close();
+        
+            $row = mysqli_fetch_array($res, MYSQLI_ASSOC);
+        
+            $count = $res->num_rows;
+            if ($count == 1 && $row['password'] == $password) {
+                $_SESSION['user'] = $row['id'];
+                header("Location: index.php");
+            } elseif ($count == 1) {
+                $errMSG = "Bad password!";
+            } else $errMSG = "User not found!";
+        }
     }
 }
 ?>
@@ -199,26 +204,62 @@ if (isset($_POST['btn-login'])) {
                     </ul>
                     <div class="carousel-inner">
                         <div class="carousel-item active">
-                            <img class="img" src="images/3.png" alt="Los Angeles" width="1100" height="500">
-                            <div class="carousel-caption">
-                                <h3>Family Meals</h3>
-                                <p>Enjoy a great selection of dishes perfect for your family.</p>
+                                <?php
+
+                                $stmt = $conn->prepare("SELECT * FROM cover WHERE id = 1");
+                                //execute query
+                                $stmt->execute();
+                                //get result
+                                $res = $stmt->get_result();
+                                $stmt->close();
+                                $row = mysqli_fetch_array($res, MYSQLI_ASSOC);
+
+                                echo '<img class="img" src="'.$row["image"].'" width="1100" height="500">';
+                                echo '<div class="carousel-caption">';
+                                echo "<h3>".$row["title"]."</h3>";
+                                echo "<p>".$row["description"]."</p>";
+
+                                ?>
                                 <br>
                             </div>
                         </div>
                         <div class="carousel-item">
-                            <img class="img" src="images/2.png" alt="Chicago" width="1100" height="500">
-                            <div class="carousel-caption">
-                                <h3>Exquisite Pizzas</h3>
-                                <p>Have a taste of pizzas with a wide variety of flavors.</p>
+                        <?php
+
+                        $stmt = $conn->prepare("SELECT * FROM cover WHERE id = 2");
+                        //execute query
+                        $stmt->execute();
+                        //get result
+                        $res = $stmt->get_result();
+                        $stmt->close();
+                        $row = mysqli_fetch_array($res, MYSQLI_ASSOC);
+
+                        echo '<img class="img" src="'.$row["image"].'" width="1100" height="500">';
+                        echo '<div class="carousel-caption">';
+                        echo "<h3>".$row["title"]."</h3>";
+                        echo "<p>".$row["description"]."</p>";
+
+                        ?>
                                 <br>
                             </div>
                         </div>
                         <div class="carousel-item">
-                            <img class="img" src="images/1.png" alt="New York" width="1100" height="500">
-                            <div class="carousel-caption">
-                                <h3>Tempting Seafood</h3>
-                                <p>Eat like a king with perfectly-cooked seafood.</p>
+                        <?php
+
+                            $stmt = $conn->prepare("SELECT * FROM cover WHERE id = 3");
+                            //execute query
+                            $stmt->execute();
+                            //get result
+                            $res = $stmt->get_result();
+                            $stmt->close();
+                            $row = mysqli_fetch_array($res, MYSQLI_ASSOC);
+
+                            echo '<img class="img" src="'.$row["image"].'" width="1100" height="500">';
+                            echo '<div class="carousel-caption">';
+                            echo "<h3>".$row["title"]."</h3>";
+                            echo "<p>".$row["description"]."</p>";
+
+                            ?>
                                 <br>
                             </div>
                         </div>

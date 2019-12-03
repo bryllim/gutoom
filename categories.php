@@ -70,22 +70,27 @@ if (isset($_POST['btn-login'])) {
     
         $password = hash('sha256', $upass); // password hashing using SHA256
         $stmt = $conn->prepare("SELECT id, username, password FROM users WHERE email= ?");
-        $stmt->bind_param("s", $email);
-        //execute query
-        $stmt->execute();
-        //get result
-        $res = $stmt->get_result();
-        $stmt->close();
-    
-        $row = mysqli_fetch_array($res, MYSQLI_ASSOC);
-    
-        $count = $res->num_rows;
-        if ($count == 1 && $row['password'] == $password) {
-            $_SESSION['user'] = $row['id'];
-            header("Location: index.php");
-        } elseif ($count == 1) {
-            $errMSG = "Bad password!";
-        } else $errMSG = "User not found!";
+
+        if($stmt == FALSE){
+            $errMSG = "User not found!";
+        }else{
+            $stmt->bind_param("s", $email);
+            //execute query
+            $stmt->execute();
+            //get result
+            $res = $stmt->get_result();
+            $stmt->close();
+        
+            $row = mysqli_fetch_array($res, MYSQLI_ASSOC);
+        
+            $count = $res->num_rows;
+            if ($count == 1 && $row['password'] == $password) {
+                $_SESSION['user'] = $row['id'];
+                header("Location: index.php");
+            } elseif ($count == 1) {
+                $errMSG = "Bad password!";
+            } else $errMSG = "User not found!";
+        }
     }
 }
 ?>
@@ -204,13 +209,13 @@ if (isset($_POST['btn-login'])) {
                 </a>
             </div>
             <div class="col-3">
-                <a href="#">
+                <a href="restaurants.php?category=LECHON">
                     <img src="images/categories/6.png" style="height:auto; width:100%">
                     <h6 class="text-center bold">LECHON</h6>
                 </a>
             </div>
             <div class="col-3">
-                <a href="#">
+                <a href="restaurants.php?category=TOP">
                     <img src="images/categories/5.png" style="height:auto; width:100%">
                     <h6 class="text-center bold">HIGHEST RATED</h6>
                 </a>
@@ -218,25 +223,25 @@ if (isset($_POST['btn-login'])) {
         </div>
         <div class="row">
             <div class="col-3">
-                <a href="#">
+                <a href="restaurants.php?category=VALUE">
                     <img src="images/categories/4.png" style="height:auto; width:100%">
                     <h6 class="text-center bold">BEST VALUE</h6>
                 </a>
             </div>
             <div class="col-3">
-                <a href="#">
+                <a href="restaurants.php?category=SAMGYEOPSAL">
                     <img src="images/categories/3.png" style="height:auto; width:100%">
                     <h6 class="text-center bold">SAMGYEOPSAL</h6>
                 </a>
             </div>
             <div class="col-3">
-                <a href="#">
+                <a href="restaurants.php?category=CHINESE">
                     <img src="images/categories/2.png" style="height:auto; width:100%">
                     <h6 class="text-center bold">CHINESE</h6>
                 </a>
             </div>
             <div class="col-3">
-                <a href="#">
+                <a href="restaurants.php?category=BUFFET">
                     <img src="images/categories/1.png" style="height:auto; width:100%">
                     <h6 class="text-center bold">BUFFET</h6>
                 </a>

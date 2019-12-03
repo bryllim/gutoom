@@ -10,11 +10,44 @@ if (isset($_SESSION['user']) != "") {
     $userRow = mysqli_fetch_array($res, MYSQLI_ASSOC);
 }
 
+//reservation
+if (isset($_POST['reservation'])) {
+
+    $stmt2 = $conn->prepare("SELECT * FROM users WHERE id = ?");
+    $stmt2->bind_param("s", $userRow['id']);
+    $stmt2->execute();
+    $res2 = $stmt2->get_result();
+    $user = mysqli_fetch_array($res2, MYSQLI_ASSOC);
+
+    $stmt2 = $conn->prepare("SELECT * FROM restaurant WHERE id = ?");
+    $stmt2->bind_param("s", $_GET['id']);
+    $stmt2->execute();
+    $res2 = $stmt2->get_result();
+    $res_email = mysqli_fetch_array($res2, MYSQLI_ASSOC);
+
+    $res_email = $res_email["email"];
+    $useremail = $user['email'];
+    $user = $user['firstname'].' '.$user['lastname'];
+    $datetime = $_POST['datetime'];
+    $note = $_POST['note'];
+    
+    $subject = 'Restaurant Reservation';
+    $message = $user.' would like to make a reservation in your restaurant on '.$datetime.' with the following note: "'.$note.'". You may contact the customer for the confirmation with his/her email account at '.$useremail.'.';
+    $headers = 'From: Gutom? The Restaurant Web App';
+    if (mail($res_email,$subject,$message,$headers)) {
+        $errMSG = "Reservation sent to restaurant!";
+    } else {
+        $errMSG = "Something went wrong, please try again.";
+    }
+
+}
+
 //review
 if (isset($_POST['review'])) {
 
     $user_id = $userRow['id'];
     $restaurant_id = $_GET['id'];
+    
     $rating = $_POST['rating'];
     $remarks = $_POST['remarks'];
     $datetime = date('Y-m-d H:i:s');
@@ -85,22 +118,27 @@ if (isset($_POST['btn-login'])) {
     
         $password = hash('sha256', $upass); // password hashing using SHA256
         $stmt = $conn->prepare("SELECT id, username, password FROM users WHERE email= ?");
-        $stmt->bind_param("s", $email);
-        //execute query
-        $stmt->execute();
-        //get result
-        $res = $stmt->get_result();
-        $stmt->close();
-    
-        $row = mysqli_fetch_array($res, MYSQLI_ASSOC);
-    
-        $count = $res->num_rows;
-        if ($count == 1 && $row['password'] == $password) {
-            $_SESSION['user'] = $row['id'];
-            header("Location: index.php");
-        } elseif ($count == 1) {
-            $errMSG = "Bad password!";
-        } else $errMSG = "User not found!";
+
+        if($stmt == FALSE){
+            $errMSG = "User not found!";
+        }else{
+            $stmt->bind_param("s", $email);
+            //execute query
+            $stmt->execute();
+            //get result
+            $res = $stmt->get_result();
+            $stmt->close();
+        
+            $row = mysqli_fetch_array($res, MYSQLI_ASSOC);
+        
+            $count = $res->num_rows;
+            if ($count == 1 && $row['password'] == $password) {
+                $_SESSION['user'] = $row['id'];
+                header("Location: index.php");
+            } elseif ($count == 1) {
+                $errMSG = "Bad password!";
+            } else $errMSG = "User not found!";
+        }
     }
 }
 ?>
@@ -326,13 +364,13 @@ if (isset($_POST['btn-login'])) {
                     <form method="POST" autocomplete="off">
                         <div class="form-group">
                             <p>Enter the date and time for your reservation.</p>
-                            <input type="datetime-local" name="firstname" class="form-control" required/>
+                            <input type="datetime-local" name="datetime" class="form-control" required/>
                             <hr>
                             <p>Add notes to the restaurant.</p>
-                            <textarea type="text" name="pass" class="form-control mt-1" placeholder="Write here..." required></textarea>
+                            <textarea type="text" name="note" class="form-control mt-1" placeholder="Write here..." required></textarea>
                         </div>
                         <hr>
-                        <button type="submit" name="signup" id="reg" class="btn btn-block btn-light bold" style="background:pink !important; border:0 !important">Submit</button>
+                        <button type="submit" name="reservation" class="btn btn-block btn-light bold" style="background:pink !important; border:0 !important">Submit</button>
                     </form>
                 </div>
             </div>
@@ -365,7 +403,7 @@ if (isset($_POST['btn-login'])) {
                             <textarea type="text" name="remarks" class="form-control mt-1" placeholder="Write here..." required></textarea>
                         </div>
                         <hr>
-                        <button type="submit" name="review" id="reg" class="btn btn-block btn-light bold" style="background:pink !important; border:0 !important">Submit</button>
+                        <button type="submit" name="review" class="btn btn-block btn-light bold" style="background:pink !important; border:0 !important">Submit</button>
                     </form>
                 </div>
             </div>
